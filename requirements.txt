@@ -1,0 +1,20 @@
+# 基础依赖（nvcr.io/nvidia/tensorrt:25.10-py3 镜像已预装，无需重复安装）
+# tensorrt
+# pycuda
+# numpy
+# opencv-python
+
+# CUDA Python bindings（镜像未预装，必须安装）
+cuda-python
+
+# 项目特有依赖
+scipy
+lap
+cython_bbox
+grpcio
+
+# Webhook 通知 + 配置加载 + 日志
+requests
+pyyaml
+loguru
+protobuf

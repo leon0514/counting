@@ -1,0 +1,13 @@
+debug/
+events/
+logs/
+models/
+test_images/
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.DS_Store
+*.env
+*.pyc

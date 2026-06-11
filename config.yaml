@@ -1,0 +1,42 @@
+cameras:
+  - name: "entrance"
+    rtsp_url: "rtsp://admin:lww123456@172.16.22.16:554/Streaming/Channels/1001"
+    server: "172.16.20.193:50051"
+    # 检测线配置：只需提供一条线，程序自动向法向量两侧扩展成双线
+    # line: 基准线 x1,y1,x2,y2  （法向量 normal=(-dy,dx)，该方向为 "in"）
+    # gate_width: 双线间距（像素），默认 60，向法向量两侧各扩展 gate_width/2
+    line: "696,549,2138,1185"
+    gate_width: 60
+    reverse: false
+    model_type: "yolo"
+    detect_model: "models/trt_models/yolo11s.plan"
+    gpu_id: 0
+    decoder: 1
+    interval_ms: 0
+    event_dir: "./events"  # 可选：保存事件图片的目录
+
+  - name: "exit"
+    rtsp_url: "rtsp://admin:lww123456@172.16.22.16:554/Streaming/Channels/701"
+    server: "172.16.20.193:50051"
+    line: "808,728,1326,684"
+    gate_width: 60
+    reverse: true
+    model_type: "yolo"
+    detect_model: "models/trt_models/yolo11s.plan"
+    gpu_id: 0
+    decoder: 1
+    interval_ms: 0
+
+webhooks:
+  - url: "http://172.16.21.197:8089/open/api/passengerFlow/record"
+    method: "POST"
+    headers:
+      Content-Type: "application/json"
+    body_template:
+      camera: "{camera}"
+      event: "{event}"
+      timestamp: "{timestamp}"
+    events:
+      - "in"
+      - "out"
+    cooldown_seconds: 0

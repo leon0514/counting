@@ -1,0 +1,33 @@
+services:
+  counting:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: counting:latest
+    container_name: counting
+    runtime: nvidia
+    ipc: host
+    shm_size: 16g
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [gpu]
+    environment:
+      - TZ=Asia/Shanghai
+    # 健康检查配置
+    healthcheck:
+      test: ["CMD-SHELL", "nvidia-smi || exit 1"]  # 核心命令
+      interval: 30s      # 每30秒检查一次
+      timeout: 10s       # 单次检查超时时间为10秒
+      retries: 3         # 连续失败3次才标记为不健康
+      start_period: 60s  # 给予容器60秒的启动宽限期，避免误判
+    volumes:
+      - .:/workspace/counting
+    working_dir: /workspace/counting
+    command: ["python", "main.py", "--config", "config.yaml"]
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
